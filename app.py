@@ -40,19 +40,22 @@ if uploaded_file and api_key:
                 # 텍스트 추출
                 full_text = extract_text_from_epub(uploaded_file)
                 
-                # Gemini 모델 설정
-                model = genai.GenerativeModel('gemini-3.8-flash')
+                # 무료 한도(25만 토큰) 초과 방지를 위해 앞부분 150,000자 내외로 자동 절삭
+                truncated_text = full_text[:150000]
+                
+                # 안정적인 Gemini 최신 모델 사용
+                model = genai.GenerativeModel('gemini-1.5-flash')
                 
                 prompt = f"""
-                다음은 도서의 전체 내용입니다. 아래 형식에 맞춰 한글로 상세하게 요약해주세요.
+                다음은 도서의 내용 일부입니다. 아래 형식에 맞춰 한글로 상세하게 요약해주세요.
 
                 1. **한 줄 요약**: 전체 핵심 메시지
                 2. **주요 등장인물/개념**: 핵심 인물이나 키워드 정리
-                3. **장(Chapter)별 핵심 줄거리**: 주요 단원별 내용 요약
-                4. **핵심 시사점 및 인사이트**: 이 책에서 얻을 수 있는 결론
+                3. **핵심 줄거리 및 내용**: 주요 스토리 단원별 내용 요약
+                4. **핵심 시사점 및 인사이트**: 이 내용에서 얻을 수 있는 결론
 
                 [도서 텍스트]
-                {full_text}
+                {truncated_text}
                 """
                 
                 response = model.generate_content(prompt)
