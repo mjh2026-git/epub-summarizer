@@ -55,7 +55,7 @@ if uploaded_file and api_key:
                     available_models[0]
                 )
                 
-                model = genai.GenerativeModel(selected_model_name)
+                model = genai.GenerativeModel('gemini-1.5-flash')
                 
                 prompt = f"""
                 다음은 도서의 내용 일부입니다. 아래 형식에 맞춰 한글로 상세하게 요약해주세요.
