@@ -43,15 +43,15 @@ if uploaded_file and api_key:
                 # 무료 토큰 한도 초과 방지 (150,000자 절삭)
                 truncated_text = full_text[:150000]
                 
-                # 사용 가능한 모델 자동 감지 (오류 방지)
+                # 계정에서 지원하는 모델 목록 자동 조회
                 available_models = [
                     m.name for m in genai.list_models() 
                     if 'generateContent' in m.supported_generation_methods
                 ]
                 
-                # flash 모델 우선 선택, 없으면 첫번째 모델 선택
+                # 모델 자동 선택 (gemini-3.8-flash 또는 사용 가능한 flash 모델)
                 selected_model_name = next(
-                    (m for m in available_models if 'flash' in m), 
+                    (m for m in available_models if '3.8-flash' in m or 'flash' in m), 
                     available_models[0]
                 )
                 
