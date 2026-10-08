@@ -40,11 +40,22 @@ if uploaded_file and api_key:
                 # 텍스트 추출
                 full_text = extract_text_from_epub(uploaded_file)
                 
-                # 무료 한도(25만 토큰) 초과 방지를 위해 앞부분 150,000자 내외로 자동 절삭
+                # 무료 토큰 한도 초과 방지 (150,000자 절삭)
                 truncated_text = full_text[:150000]
                 
-                # 안정적인 Gemini 최신 모델 사용
-                model = genai.GenerativeModel('gemini-1.5-flash')
+                # 사용 가능한 모델 자동 감지 (오류 방지)
+                available_models = [
+                    m.name for m in genai.list_models() 
+                    if 'generateContent' in m.supported_generation_methods
+                ]
+                
+                # flash 모델 우선 선택, 없으면 첫번째 모델 선택
+                selected_model_name = next(
+                    (m for m in available_models if 'flash' in m), 
+                    available_models[0]
+                )
+                
+                model = genai.GenerativeModel(selected_model_name)
                 
                 prompt = f"""
                 다음은 도서의 내용 일부입니다. 아래 형식에 맞춰 한글로 상세하게 요약해주세요.
