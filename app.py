@@ -41,7 +41,7 @@ if uploaded_file and api_key:
                 full_text = extract_text_from_epub(uploaded_file)
                 
                 # Gemini 모델 설정
-                model = genai.GenerativeModel('gemini-2.0-flash')
+                model = genai.GenerativeModel('gemini-3.8-flash')
                 
                 prompt = f"""
                 다음은 도서의 전체 내용입니다. 아래 형식에 맞춰 한글로 상세하게 요약해주세요.
