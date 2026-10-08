@@ -51,11 +51,11 @@ if uploaded_file and api_key:
                 
                 # 모델 자동 선택 (gemini-3.8-flash 또는 사용 가능한 flash 모델)
                 selected_model_name = next(
-                    (m for m in available_models if '3.8-flash' in m or 'flash' in m), 
+                    (m for m in available_models if '1.5-flash' in m or 'flash' in m), 
                     available_models[0]
                 )
                 
-                model = genai.GenerativeModel(gemini-3.8-flash)
+                model = genai.GenerativeModel(selected_model_name)
                 
                 prompt = f"""
                 다음은 도서의 내용 일부입니다. 아래 형식에 맞춰 한글로 상세하게 요약해주세요.
